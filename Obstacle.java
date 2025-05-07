@@ -1,14 +1,16 @@
+import java.awt.geom.Point2D;
+
 public class Obstacle implements IObstacle{
     private int id;
-    private Vector2D position;
+    private Point2D.Double position;
 
-    public Obstacle(int id, Vector2D position){
+    public Obstacle(int id, Point2D.Double position){
         this.id = id;
         this.position = position;
     }
 
     @Override
-    public double distanceTo(Vector2D position){
-        return 0;
+    public double distanceTo(Point2D position){
+        return this.position.distance(position);
     }
 }

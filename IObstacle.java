@@ -1,3 +1,5 @@
+import java.awt.geom.Point2D;
+
 public interface IObstacle {
-    double distanceTo(Vector2D position);
+    double distanceTo(Point2D position);
 }
