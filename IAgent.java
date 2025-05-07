@@ -1,8 +1,8 @@
 public interface IAgent {
 
-    void update(Vector2D newPosition);
+    void update(Vector2D new_position);
 
-    void changeStatus(boolean newStatus);
+    void changeStatus(boolean new_status);
 
     void applyForce(Vector2D force);
 
