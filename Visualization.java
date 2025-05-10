@@ -44,7 +44,6 @@ public class Visualization implements IVisualization {
 
     @Override
     public void update() {
-        // For now, update is just re-rendering the scene
         render();
     }
 }
