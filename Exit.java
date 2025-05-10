@@ -13,17 +13,14 @@ public class Exit implements IExit{
     }
 
     @Override
-    public bool isAt(Point2D given_position)
+    public boolean isAt(Point2D given_position)
     {
         // checks if given position is the position of the exit
-        return(given_position == this.position)? True : False;
+        return(given_position == this.position)? true : false;
     }
 
     @Override
-    public double distanceTo(Point2D given_position)
-    {
-        int temp = 27;
-        return temp;
-
+    public double distanceTo(Point2D otherPosition){
+        return this.position.distance(otherPosition);
     }
 }

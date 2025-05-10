@@ -2,7 +2,7 @@ import javafx.geometry.Point2D;
 
 public interface IExit {
 
-    bool isAt(Point2D given_position);
+    boolean isAt(Point2D given_position);
 
     double distanceTo(Point2D given_position);
 
