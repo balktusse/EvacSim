@@ -1,7 +1,9 @@
+import javafx.geometry.Point2D;
+
 public interface IExit {
 
-    bool isAt(Vector2D given_position);
+    bool isAt(Point2D given_position);
 
-    double distanceTo(Vector2D given_position);
+    double distanceTo(Point2D given_position);
 
 }
