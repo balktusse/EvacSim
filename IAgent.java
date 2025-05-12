@@ -1,10 +1,14 @@
+import javafx.geometry.Point2D;
+
 public interface IAgent {
 
-    void update(Vector2D new_position);
+    Point2D getPosition();
+
+    void update(Point2D new_position);
 
     void changeStatus(boolean new_status);
 
-    void applyForce(Vector2D force);
+    void applyForce(Point2D force);
 
-    double distanceTo(Vector2D position);
+    double distanceTo(Point2D position);
 }
