@@ -20,7 +20,7 @@ public class Exit implements IExit{
     }
 
     @Override
-    public double distanceTo(Point2D other_position){
-        return this.position.distance(other_position);
+    public double distanceTo(Point2D given_position){
+        return this.position.distance(given_position);
     }
 }
