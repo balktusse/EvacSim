@@ -1,6 +1,6 @@
 import javafx.geometry.Point2D;
 
-public class AgentTest {
+public class main {
 
     public static void main(String[] args) {
         // Create a new Agent with ID 1 at position (0, 0)
