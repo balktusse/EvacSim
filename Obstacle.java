@@ -10,7 +10,7 @@ public class Obstacle implements IObstacle{
     }
 
     @Override
-    public double distanceTo(Point2D otherPosition){
-        return this.position.distance(otherPosition);
+    public double distanceTo(Point2D other_position){
+        return this.position.distance(other_position);
     }
 }
