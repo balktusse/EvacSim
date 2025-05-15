@@ -1,7 +1,7 @@
 import javafx.geometry.Point2D;
 import jdk.internal.agent.Agent;
 
-import java.awt.geom.Point2D;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -13,21 +13,21 @@ public class Environment implements IEnvironment{
     private Magnet magnet;
 
     public Environment(){
-        List<Agent> agents = new ArrayList<>();
-        List<Obstacle> obstacles = new ArrayList<>();
-        List<Exit> exits = new ArrayList<>();
+        this.agents = new ArrayList<>();
+        this.obstacles = new ArrayList<>();
+        this.exits = new ArrayList<>();
     }
 
     @Override
     public void addAgents(int num_agents, double minX, double maxX, double minY, double maxY){
         if(map != null){
-            Point2D position = getRandomPoint(minX, maxX, minY, maxY);
-            for(int id = 0; id < num_agents, id++){
+            Point2D position = map.getRandomPoint(minX, maxX, minY, maxY);
+            for(int id = 0; id < num_agents; id++){
                 while (freePosition(position) != true){
-                    position = getRandomPoint(minX, maxX, minY, maxY);
+                    position = map.getRandomPoint(minX, maxX, minY, maxY);
                 }
-                agent = new Agent(id, position);
-                agents.add(agent)
+                Agent agent = new Agent(id, position);
+                agents.add(agent);
 
             }
         }
@@ -35,7 +35,7 @@ public class Environment implements IEnvironment{
 
     @Override
     public void removeAgent(Agent agent){
-
+        agents.remove(agent);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class Environment implements IEnvironment{
     }
 
     @Override
-    boolean freePosition(Point2D position){
+    public boolean freePosition(Point2D position){
         for(Agent agent : agents){
             if(agent.getPosition().equals(position)){ return false; }
         }
