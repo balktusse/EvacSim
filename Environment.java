@@ -71,7 +71,7 @@ public class Environment implements IEnvironment{
 
     @Override
     public void setMap(int width, int height){
-
+        this.map = new Map(width, height);
     }
 
     @Override
