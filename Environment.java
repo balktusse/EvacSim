@@ -38,8 +38,23 @@ public class Environment implements IEnvironment{
     }
 
     @Override
-    public void addObstacle(Point2D position){
-        // fancy code here
+    public void addObstacle(Point2D top_right, Point2D bottom_left){
+        if(map != null){
+            Obstacle obstacle = new Obstacle(top_right, bottom_left);
+            double x_axis = top_right.getX() - bottom_left.getX();
+            double y_axis = top_right.getY() - bottom_left.getY();
+
+            // checking so that every point for the obstacle's area is free
+            for(x = 0; x < x_axis; x++){
+                for(y = 0; y < y_axis; x++){
+                    if(freePosition(x,y) != true){
+                        System.out.println("Obstacle overrides another object!");
+                        return;
+                    }
+                }
+            }
+            obstacles.add(obstacle);
+        }
     }
 
     @Override
