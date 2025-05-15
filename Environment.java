@@ -1,5 +1,4 @@
 import javafx.geometry.Point2D;
-import jdk.internal.agent.Agent;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -19,12 +18,12 @@ public class Environment implements IEnvironment{
     }
 
     @Override
-    public void addAgents(int num_agents, double minX, double maxX, double minY, double maxY){
+    public void addAgents(int num_agents){
         if(map != null){
-            Point2D position = map.getRandomPoint(minX, maxX, minY, maxY);
+            Point2D position = map.getRandomPosition();
             for(int id = 0; id < num_agents; id++){
                 while (freePosition(position) != true){
-                    position = map.getRandomPoint(minX, maxX, minY, maxY);
+                    position = map.getRandomPosition();
                 }
                 Agent agent = new Agent(id, position);
                 agents.add(agent);
@@ -40,7 +39,7 @@ public class Environment implements IEnvironment{
 
     @Override
     public void addObstacle(Point2D position){
-
+        // fancy code here
     }
 
     @Override
