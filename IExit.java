@@ -6,4 +6,6 @@ public interface IExit {
 
     double distanceTo(Point2D given_position);
 
+    Point2D getPosition();
+
 }
