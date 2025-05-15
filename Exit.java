@@ -23,4 +23,9 @@ public class Exit implements IExit{
     public double distanceTo(Point2D given_position){
         return this.position.distance(given_position);
     }
+
+    @Override
+    public Point2D getPosition(){
+        return this.position;
+    }
 }
