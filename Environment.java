@@ -52,7 +52,7 @@ public class Environment implements IEnvironment{
 
     @Override
     public void setMagnet(double force_agent, double force_wall, double force_exit, double force_object){
-
+        this.magnet = new Magnet(force_agent, force_wall, force_exit, force_object);
     }
 
     @Override
