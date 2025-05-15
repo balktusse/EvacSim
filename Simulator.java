@@ -2,6 +2,7 @@ public class Simulator {
 
     private Environment environment;
     private DataCollector data_collector;
+    private boolean paused = false;
 
     public Simulator(Environment environment, DataCollector data_collector) {
         this.environment = environment;
@@ -14,6 +15,12 @@ public class Simulator {
     }
 
     public boolean update() {
+        // simulation paused, return that the state is updated with no change
+        if (paused){
+            System.out.println("Simulation paused. No updates performed.");
+            return true;
+        }
+
         try {
             for (Agent agent : environment.getAgents()) {
                 agent.move();
@@ -42,7 +49,8 @@ public class Simulator {
     }
 
     public boolean pause() {
-
+        paused = true;
+        System.out.println("Pause enabled.");
         return true;
     }
 
