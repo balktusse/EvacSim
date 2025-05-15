@@ -45,7 +45,9 @@ public class Environment implements IEnvironment{
 
     @Override
     public void addExit(Point2D position, int capacity){
-
+        int id = exits.size();
+        Exit exit = new Exit(id, position, capacity);
+        exits.add(exit);
     }
 
     @Override
