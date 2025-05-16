@@ -3,6 +3,7 @@ public class Simulator {
     private Environment environment;
     private DataCollector data_collector;
     private boolean paused = false;
+    private boolean running = false;
 
     public Simulator(Environment environment, DataCollector data_collector) {
         this.environment = new Environment();
@@ -10,6 +11,26 @@ public class Simulator {
     }
 
     public boolean run() {
+        if(running){return false;}
+
+        paused = false;
+        running = true;
+
+        new Thread(() -> {
+            while (running) {
+                if (!paused) {
+                    update();
+                }
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    System.err.println("Simulation interrupted.");
+                    break;
+                }
+            }
+        }).start();
 
         return true;
     }
