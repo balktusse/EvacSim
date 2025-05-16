@@ -79,7 +79,20 @@ public class Environment implements IEnvironment{
             if(agent.getPosition().equals(position)){ return false; }
         }
         for(Obstacle obstacle : obstacles){
-            if(obstacle.getPosition().equals(position)){ return false; }
+            List<Point2D> points = obstacle.getPosition();
+
+            Point2D p1 = points.get(0);
+            Point2D p2 = points.get(1);
+
+            double minX = Math.min(p1.getX(), p2.getX());
+            double maxX = Math.max(p1.getX(), p2.getX());
+            double minY = Math.min(p1.getY(), p2.getY());
+            double maxY = Math.max(p1.getY(), p2.getY());
+
+            if (position.getX() >= minX && position.getX() <= maxX &&
+                    position.getY() >= minY && position.getY() <= maxY) {
+                return false;
+            }
         }
         return true;
     }
