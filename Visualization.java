@@ -77,11 +77,10 @@ public class Visualization {
             renderPane.getChildren().add(obsRect);
         }
 
-        for (ExitInfo exit : simulator.getExits()) {
-            Rectangle exitRect = new Rectangle(exit.getX(), exit.getY(), 15, 15);
+        for (Point p : simulator.getExitPositions()) {
+            Rectangle exitRect = new Rectangle(p.getX(), p.getY(), 15, 15);
             exitRect.setFill(Color.GREEN);
             renderPane.getChildren().add(exitRect);
-            renderPane.getChildren().add(new Text(exit.getX(), exit.getY() - 5, "Exit " + exit.getId()));
         }
     }
 }
