@@ -39,7 +39,6 @@ public class Environment implements IEnvironment{
     @Override
     public void addObstacle(Point2D top_right, Point2D bottom_left){
         if(map != null){
-            Obstacle obstacle = new Obstacle(top_right, bottom_left);
             double x_axis = top_right.getX() - bottom_left.getX();
             double y_axis = top_right.getY() - bottom_left.getY();
 
@@ -52,6 +51,7 @@ public class Environment implements IEnvironment{
                     }
                 }
             }
+            Obstacle obstacle = new Obstacle(top_right, bottom_left);
             obstacles.add(obstacle);
         }
     }
