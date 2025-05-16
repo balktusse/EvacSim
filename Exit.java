@@ -1,31 +1,48 @@
 import javafx.geometry.Point2D;
 
-public class Exit implements IExit{
-    private int id;
-    private Point2D position;
-    private int capacity;
+import java.util.ArrayList;
+import java.util.List;
 
-    public Exit(int Id, Point2D position, int capacity)
+public class Exit implements IExit{
+    private final int id;
+    private final List<Point2D> position;
+    private final int capacity;
+
+    private double clamp(double value, double min, double max) {
+        return Math.max(min, Math.min(value, max));
+    }
+
+    public Exit(int id, Point2D left, Point2D right, int capacity)
     {
         this.id = id;
-        this.position = position;
-        this.capacity = capacity;
+        this.position = new ArrayList<>();
+        this.position.add(left);
+        this.position.add(right);
     }
 
     @Override
-    public boolean isAt(Point2D given_position)
-    {
-        // checks if given position is the position of the exit
-        return(given_position == this.position)? true : false;
+    @Override
+    public boolean isAt(Point2D given_position) {
+        double x = given_position.getX();
+        double y = given_position.getY();
+
+        double minX = Math.min(position.get(0).getX(), position.get(1).getX());
+        double maxX = Math.max(position.get(0).getX(), position.get(1).getX());
+        double yLine = position.get(0).getY(); // assume both have same Y
+
+        return (x >= minX && x <= maxX) && (y == yLine);
     }
 
     @Override
-    public double distanceTo(Point2D given_position){
-        return this.position.distance(given_position);
+    public double distanceTo(Point2D other_position){
+        double clampedX = clamp(other_position.getX(), position.get(1).getX(), position.get(0).getX());
+        double clampedY = clamp(other_position.getY(), position.get(1).getY(), position.get(0).getY());
+
+        return other_position.distance(clampedX, clampedY);
     }
 
     @Override
-    public Point2D getPosition(){
+    public List<Point2D> getPosition(){
         return this.position;
     }
 }

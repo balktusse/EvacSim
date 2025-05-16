@@ -34,8 +34,7 @@ public class Environment implements IEnvironment{
 
     @Override
     public void removeAgent(Agent agent){
-        agents.remove(agent);
-    }
+        agents.remove(agent);}
 
     @Override
     public void addObstacle(Point2D top_right, Point2D bottom_left){
