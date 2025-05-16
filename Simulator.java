@@ -5,8 +5,8 @@ public class Simulator {
     private boolean paused = false;
 
     public Simulator(Environment environment, DataCollector data_collector) {
-        this.environment = environment;
-        this.data_collector = data_collector;
+        this.environment = new Environment();
+        this.data_collector = new DataCollector();
     }
 
     public boolean run() {
@@ -23,16 +23,13 @@ public class Simulator {
 
         try {
             for (Agent agent : environment.getAgents()) {
-                agent.move();
-                if (environment.hasExited(agent)) {
+                agent.update();
+                if (/*evacuated agents*/) {
                     environment.removeAgent(agent);
                     data_collector.collectData(1);
                 }
             }
-
-
             data_collector.advanceTime(1.0);
-
 
             visualization.update();
 
@@ -44,8 +41,16 @@ public class Simulator {
     }
 
     public boolean reset() {
-
-        return true;
+        try {
+            environment.clear();
+            data_collector = new DataCollector();
+            paused = false;
+            System.out.println("Simulation reset.");
+            return true;
+        } catch (Exception e) {
+            System.err.println("Error during reset: " + e.getMessage());
+            return false;
+        }
     }
 
     public boolean pause() {
@@ -54,8 +59,22 @@ public class Simulator {
         return true;
     }
 
-    public boolean stop() {
-
+    public boolean resume(){
+        paused = false;
+        System.out.println("Resume enabled.");
         return true;
+    }
+
+    public boolean stop() {
+        try {
+            paused = true;
+            environment.remove();
+            data_collector = new DataCollector();
+            System.out.println("Simulation stopped.");
+            return true;
+        } catch (Exception e) {
+            System.err.println("Error during stop: " + e.getMessage());
+            return false;
+        }
     }
 }

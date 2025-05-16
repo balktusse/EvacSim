@@ -45,8 +45,8 @@ public class Environment implements IEnvironment{
             double y_axis = top_right.getY() - bottom_left.getY();
 
             // checking so that every point for the obstacle's area is free
-            for(x = 0; x < x_axis; x++){
-                for(y = 0; y < y_axis; y++){
+            for(int x = 0; x < x_axis; x++){
+                for(int y = 0; y < y_axis; y++){
                     if(freePosition(x,y) != true){
                         System.out.println("Obstacle overrides another object!");
                         return;
