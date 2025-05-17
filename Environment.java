@@ -27,7 +27,6 @@ public class Environment implements IEnvironment{
                 }
                 Agent agent = new Agent(id, position);
                 agents.add(agent);
-
             }
         }
     }
@@ -44,10 +43,12 @@ public class Environment implements IEnvironment{
             double x_axis = top_right.getX() - bottom_left.getX();
             double y_axis = top_right.getY() - bottom_left.getY();
 
+
+            Point2D temp = new Point2D(x,y);
             // checking so that every point for the obstacle's area is free
-            for(int x = 0; x < x_axis; x++){
-                for(int y = 0; y < y_axis; y++){
-                    if(freePosition(x,y) != true){
+            for(x = 0; x < x_axis; x++){
+                for(y = 0; y < y_axis; y++){
+                    if(freePosition(temp) != true){
                         System.out.println("Obstacle overrides another object!");
                         return;
                     }

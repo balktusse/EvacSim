@@ -16,6 +16,17 @@ public class Simulator {
         paused = false;
         running = true;
 
+        /*
+        * Vi får nog se över alla funktioner här o göra om
+        *
+        * Chatten la till massa funktioner som vi inte har
+        *
+        * Så jag låter det vara så länge så får vi kolla här gemensamt
+        *
+        * Det är alla funktioner utom pause och resume tänker jag
+        *
+        *
+        * */
         new Thread(() -> {
             while (running) {
                 if (!paused) {
