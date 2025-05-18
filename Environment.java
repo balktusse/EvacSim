@@ -3,7 +3,15 @@ import javafx.geometry.Point2D;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
-
+/*
+*
+*
+* YEAS C'MON
+*
+*
+*
+*
+* */
 public class Environment implements IEnvironment{
     private List<Agent> agents;
     private List<Obstacle> obstacles;
