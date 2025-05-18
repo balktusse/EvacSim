@@ -5,7 +5,7 @@ public class Simulator {
     private boolean paused = false;
     private boolean running = false;
 
-    public Simulator(Environment environment, DataCollector data_collector) {
+    public Simulator() {
         this.environment = new Environment();
         this.data_collector = new DataCollector();
     }

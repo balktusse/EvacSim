@@ -44,7 +44,6 @@ public class Environment implements IEnvironment{
             agents.add(agent);
             }
         }
-    }
 
     @Override
     public void removeAgent(Agent agent){
@@ -74,7 +73,6 @@ public class Environment implements IEnvironment{
             }
             obstacles.add(obstacle);
         }
-    }
 
     @Override
     public void addExit(Point2D position, int capacity){
