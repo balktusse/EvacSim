@@ -3,15 +3,7 @@ import javafx.geometry.Point2D;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
-/*
-*
-*
-* YEAS C'MON
-*
-*
-*
-*
-* */
+
 public class Environment implements IEnvironment{
     private List<Agent> agents;
     private List<Obstacle> obstacles;
@@ -23,6 +15,16 @@ public class Environment implements IEnvironment{
         this.agents = new ArrayList<>();
         this.obstacles = new ArrayList<>();
         this.exits = new ArrayList<>();
+    }
+
+    public void update() {
+        if (map != null) {
+            for (Agent agent : agents) {
+                Point2D force = magnet.computeResultForce(agent, agents, obstacles, exits);
+                agent.applyForce(force);
+                agent.step();
+            }
+        }
     }
 
     @Override

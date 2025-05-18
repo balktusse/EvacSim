@@ -4,7 +4,7 @@ public interface IAgent {
 
     Point2D getPosition();
 
-    void update(Point2D new_position);
+    public void step();
 
     void changeStatus(boolean new_status);
 
