@@ -3,7 +3,15 @@ import javafx.geometry.Point2D;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
-
+/*
+*
+*
+* YEAS C'MON
+*
+*
+*
+*
+* */
 public class Environment implements IEnvironment{
     private List<Agent> agents;
     private List<Obstacle> obstacles;
@@ -19,14 +27,19 @@ public class Environment implements IEnvironment{
 
     @Override
     public void addAgents(int num_agents){
-        if(map != null){
+
+        if (this.map == null) {
+            System.out.println("Map must be set before adding agents.");
+            return;
+        }
+        
+        for(int id = 0; id < num_agents; id++){
             Point2D position = map.getRandomPosition();
-            for(int id = 0; id < num_agents; id++){
-                while (freePosition(position) != true){
-                    position = map.getRandomPosition();
-                }
-                Agent agent = new Agent(id, position);
-                agents.add(agent);
+            while (freePosition(position) != true){
+                position = map.getRandomPosition();
+            }
+            Agent agent = new Agent(id, position);
+            agents.add(agent);
             }
         }
     }
@@ -38,19 +51,22 @@ public class Environment implements IEnvironment{
 
     @Override
     public void addObstacle(Point2D top_right, Point2D bottom_left){
-        if(map != null){
-            Obstacle obstacle = new Obstacle(top_right, bottom_left);
-            double x_axis = top_right.getX() - bottom_left.getX();
-            double y_axis = top_right.getY() - bottom_left.getY();
+        if (this.map == null) {
+            System.out.println("Map must be set before adding obstacles.");
+            return;
+        }
+        Obstacle obstacle = new Obstacle(top_right, bottom_left);
+        double x_axis = top_right.getX() - bottom_left.getX();
+        double y_axis = top_right.getY() - bottom_left.getY();
 
 
-            Point2D temp = new Point2D(x,y);
-            // checking so that every point for the obstacle's area is free
-            for(x = 0; x < x_axis; x++){
-                for(y = 0; y < y_axis; y++){
-                    if(freePosition(temp) != true){
-                        System.out.println("Obstacle overrides another object!");
-                        return;
+        Point2D temp = new Point2D(x,y);
+         // checking so that every point for the obstacle's area is free
+        for(x = 0; x < x_axis; x++){
+            for(y = 0; y < y_axis; y++){
+                if(freePosition(temp) != true){
+                    System.out.println("Obstacle overrides another object!");
+                    return;
                     }
                 }
             }
@@ -84,5 +100,30 @@ public class Environment implements IEnvironment{
             if(obstacle.getPosition().equals(position)){ return false; }
         }
         return true;
+    }
+
+    @Override
+    public List<Agent> getAgents() {
+        return this.agents;
+    }
+
+     @Override
+    public List<Obstacle> getObstacles() {
+        return this.obstacles;
+    }
+
+    @Override
+    public List<Exit> getExits() {
+        return this.exits;
+    }
+
+    @Override
+    public Map getMap() {
+        return this.map;
+    }
+
+    @Override
+    public Magnet getMagnet() {
+        return this.magnet;
     }
 }
