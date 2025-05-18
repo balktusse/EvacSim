@@ -105,6 +105,17 @@ public class Environment implements IEnvironment{
     }
 
     @Override
+    public List<Agent> evacuated(){
+        List<Agent> evacuated = new ArrayList<>(); 
+        for (Agent agent : agents){
+            if(agent.getStatus == true){
+                evacuated.add(agent);
+            }
+        }
+        return evacuated;
+    }
+
+    @Override
     public List<Agent> getAgents() {
         return this.agents;
     }

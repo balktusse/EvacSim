@@ -16,17 +16,6 @@ public class Simulator {
         paused = false;
         running = true;
 
-        /*
-        * Vi får nog se över alla funktioner här o göra om
-        *
-        * Chatten la till massa funktioner som vi inte har
-        *
-        * Så jag låter det vara så länge så får vi kolla här gemensamt
-        *
-        * Det är alla funktioner utom pause och resume tänker jag
-        *
-        *
-        * */
         new Thread(() -> {
             while (running) {
                 if (!paused) {
@@ -34,7 +23,7 @@ public class Simulator {
                 }
 
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(500);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     System.err.println("Simulation interrupted.");
@@ -54,13 +43,14 @@ public class Simulator {
         }
 
         try {
-            for (Agent agent : environment.getAgents()) {
-                agent.update();
-                if (/*evacuated agents*/) {
-                    environment.removeAgent(agent);
-                    data_collector.collectData(1);
-                }
+            environment.update();
+            List<Agent> safe_guys = environment.evacuated();
+
+            for (Agent agent : safe_guys) {
+                environment.removeAgent(agent);
+                data_collector.collectData(1);
             }
+            
             data_collector.advanceTime(1.0);
 
             visualization.update();
@@ -74,7 +64,7 @@ public class Simulator {
 
     public boolean reset() {
         try {
-            environment.clear();
+            environment = new Environment();
             data_collector = new DataCollector();
             paused = false;
             System.out.println("Simulation reset.");
@@ -109,4 +99,17 @@ public class Simulator {
             return false;
         }
     }
+
+    public List<Agent> getAgentPositions(){
+        return environment.getAgents();  
+    }
+
+    public List<Obstacle> getObstaclePositions(){
+        return environment.getObstacles();  
+    }
+
+    public List<Exit> getExitPositions(){
+        return environment.getExits();  
+    }
+
 }
