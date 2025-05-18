@@ -17,6 +17,16 @@ public class Environment implements IEnvironment{
         this.exits = new ArrayList<>();
     }
 
+    public update(){
+        if(map != null){
+            for(Agent agent: agents){
+                Point2D force = magnet.computeResultForce(agent, agents, obstacles, exits);
+                agent.applyForce(force);
+                agent.step();
+            }
+        }
+    }
+
     @Override
     public void addAgents(int num_agents){
         if(map != null){
