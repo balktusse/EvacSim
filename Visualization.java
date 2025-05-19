@@ -88,13 +88,14 @@ public class Visualization {
         }
 
         // Render obstacles
-        /*
+
         for (Point2D p : simulator.getObstaclePositions()) {
             Rectangle obsRect = new Rectangle(p.getX() * scaleX, p.getY() * scaleY, 10, 10);
             obsRect.setFill(Color.GRAY);
             renderPane.getChildren().add(obsRect);
         }
 
+        /*
         // Render exits
         for (Point2D p : simulator.getExitPositions()) {
             Rectangle exitRect = new Rectangle(p.getX() * scaleX, p.getY() * scaleY, 15, 15);

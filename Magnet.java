@@ -70,7 +70,7 @@ public class Magnet implements IMagnet{
                 result_force = result_force.add(attract);
             }
         }
-        /*
+
         double x = agent_pos.getX();
         double y = agent_pos.getY();
         double wallThreshold = 2.0;
@@ -92,7 +92,7 @@ public class Magnet implements IMagnet{
         if (y > maxY - wallThreshold) {
             result_force = result_force.add(new Point2D(0, -force_wall / ((maxY - y) * (maxY - y) + epsilon)));
         }
-        */
+
         return result_force;
     }
 }

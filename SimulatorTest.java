@@ -8,6 +8,7 @@ public class SimulatorTest extends Application {
         Simulator simulator = new Simulator();
         simulator.magnet();
         simulator.createMap();
+        simulator.createObstacle();
         simulator.addAgents(1000);
         System.out.println("Agents in environment: " + simulator.getAgentPositions().size());
 
