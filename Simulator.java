@@ -1,3 +1,7 @@
+import javafx.geometry.Point2D;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Simulator {
 
     private Environment environment;
@@ -53,7 +57,7 @@ public class Simulator {
             
             data_collector.advanceTime(1.0);
 
-            visualization.update();
+            //visualization.update();
 
             return true;
         } catch (Exception e) {
@@ -90,7 +94,7 @@ public class Simulator {
     public boolean stop() {
         try {
             paused = true;
-            environment.remove();
+            //environment.remove();
             data_collector = new DataCollector();
             System.out.println("Simulation stopped.");
             return true;
@@ -100,8 +104,16 @@ public class Simulator {
         }
     }
 
-    public List<Agent> getAgentPositions(){
-        return environment.getAgents();  
+    public boolean isRunning(){
+        return running;
+    }
+
+    public boolean isPaused(){
+        return paused;
+    }
+
+    public List<Point2D> getAgentPositions(){
+        return environment.getAgentPositions();
     }
 
     public List<Obstacle> getObstaclePositions(){

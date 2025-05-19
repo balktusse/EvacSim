@@ -2,7 +2,6 @@ import javafx.geometry.Point2D;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Map;
 
 public class Environment implements IEnvironment{
     private List<Agent> agents;
@@ -56,28 +55,35 @@ public class Environment implements IEnvironment{
             System.out.println("Map must be set before adding obstacles.");
             return;
         }
-        Obstacle obstacle = new Obstacle(top_right, bottom_left);
-        double x_axis = top_right.getX() - bottom_left.getX();
-        double y_axis = top_right.getY() - bottom_left.getY();
 
+        double leftX = Math.min(bottom_left.getX(), top_right.getX());
+        double rightX = Math.max(bottom_left.getX(), top_right.getX());
+        double bottomY = Math.min(bottom_left.getY(), top_right.getY());
+        double topY = Math.max(bottom_left.getY(), top_right.getY());
 
-        Point2D temp = new Point2D(x,y);
-         // checking so that every point for the obstacle's area is free
-        for(x = 0; x < x_axis; x++){
-            for(y = 0; y < y_axis; y++){
-                if(freePosition(temp) != true){
+        int startX = (int) Math.floor(leftX);
+        int endX   = (int) Math.ceil(rightX);
+        int startY = (int) Math.floor(bottomY);
+        int endY   = (int) Math.ceil(topY);
+
+        for (int x = startX; x < endX; x++) {
+            for (int y = startY; y < endY; y++) {
+                Point2D temp = new Point2D(x, y);
+                if (!freePosition(temp)) {
                     System.out.println("Obstacle overrides another object!");
                     return;
-                    }
                 }
             }
-            obstacles.add(obstacle);
         }
 
+        Obstacle obstacle = new Obstacle(top_right, bottom_left);
+        obstacles.add(obstacle);
+    }
+
     @Override
-    public void addExit(Point2D position, int capacity){
+    public void addExit(Point2D left, Point2D right, int capacity){
         int id = exits.size();
-        Exit exit = new Exit(id, position, capacity);
+        Exit exit = new Exit(id, left, right, capacity);
         exits.add(exit);
     }
 
@@ -102,38 +108,41 @@ public class Environment implements IEnvironment{
         return true;
     }
 
-    @Override
     public List<Agent> evacuated(){
         List<Agent> evacuated = new ArrayList<>(); 
         for (Agent agent : agents){
-            if(agent.getStatus == true){
+            if(agent.getStatus() == true){
                 evacuated.add(agent);
             }
         }
         return evacuated;
     }
 
-    @Override
+    public List<Point2D> getAgentPositions(){
+        List<Point2D> positions = new ArrayList<>();
+        for(Agent agent : agents){
+            positions.add(agent.getPosition());
+        }
+        return positions;
+    }
+
     public List<Agent> getAgents() {
         return this.agents;
     }
 
-     @Override
+
     public List<Obstacle> getObstacles() {
         return this.obstacles;
     }
 
-    @Override
     public List<Exit> getExits() {
         return this.exits;
     }
 
-    @Override
     public Map getMap() {
         return this.map;
     }
 
-    @Override
     public Magnet getMagnet() {
         return this.magnet;
     }

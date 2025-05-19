@@ -28,7 +28,7 @@ public class Agent implements IAgent{
 
     @Override
     public void changeStatus(boolean new_status) {
-        this.velocity = this.velocity.add(force);
+        this.status = new_status;
     }
 
     @Override

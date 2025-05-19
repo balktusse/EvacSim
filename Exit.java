@@ -18,9 +18,9 @@ public class Exit implements IExit{
         this.position = new ArrayList<>();
         this.position.add(left);
         this.position.add(right);
+        this.capacity = capacity;
     }
 
-    @Override
     @Override
     public boolean isAt(Point2D given_position) {
         double x = given_position.getX();

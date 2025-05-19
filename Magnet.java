@@ -1,11 +1,14 @@
 import javafx.geometry.Point2D;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Magnet implements IMagnet{
 
-    private double force_agent;
-    private double force_wall;
-    private double force_exit;
-    private double force_object;
+    private final double force_agent;
+    private final double force_wall;
+    private final double force_exit;
+    private final double force_object;
 
     public Magnet(double force_agent, double force_wall, double force_exit, double force_object) {
         this.force_agent = force_agent;
@@ -21,11 +24,16 @@ public class Magnet implements IMagnet{
 
         if (obstacles != null) {
             for (Obstacle obs : obstacles) {
-                Point2D obs_pos = new Point2D(obs.getPosition().getX(), obs.getPosition().getY());
-                Point2D diff = agent_pos.subtract(obs_pos);
-                double distance_sq = diff.magnitudeSquared();
-                if (distance_sq != 0) {
-                    Point2D repulse = diff.normalize().multiply(force_wall / distance_sq);
+                double distance = obs.distanceTo(agent_pos);
+                if (distance != 0) {
+                    double epsilon = 0.001;
+
+                    double dx = obs.distanceTo(agent_pos.add(epsilon, 0)) - distance;
+                    double dy = obs.distanceTo(agent_pos.add(0, epsilon)) - distance;
+
+                    Point2D gradient = new Point2D(dx, dy).normalize();
+                    Point2D repulse = gradient.multiply(force_wall / (distance * distance));
+
                     result_force = result_force.add(repulse);
                 }
             }
@@ -36,7 +44,7 @@ public class Magnet implements IMagnet{
                 if (other != agent) {
                     Point2D other_pos = other.getPosition();
                     Point2D diff = agent_pos.subtract(other_pos);
-                    double distance_sq = diff.magnitudeSquared();
+                    double distance_sq = diff.getX() * diff.getX() + diff.getY() * diff.getY();
                     if (distance_sq != 0) {
                         Point2D repulse = diff.normalize().multiply(force_agent / distance_sq);
                         result_force = result_force.add(repulse);
@@ -46,11 +54,17 @@ public class Magnet implements IMagnet{
         }
 
         for (Exit exit : exits) {
-            Point2D exit_pos = new Point2D(exit.getPosition().getX(), exit.getPosition().getY());
-            Point2D diff = exit_pos.subtract(agent_pos);
-            double distance = diff.magnitude();
+            double distance = exit.distanceTo(agent_pos);
             if (distance != 0) {
-                Point2D attract = diff.normalize().multiply(force_exit / distance);
+                // Estimate direction toward the exit via gradient
+                double epsilon = 0.001;
+
+                double dx = exit.distanceTo(agent_pos.add(epsilon, 0)) - distance;
+                double dy = exit.distanceTo(agent_pos.add(0, epsilon)) - distance;
+
+                Point2D gradient = new Point2D(dx, dy).normalize();
+                Point2D attract = gradient.multiply(-force_exit / distance);  // negative gradient = attraction
+
                 result_force = result_force.add(attract);
             }
         }
