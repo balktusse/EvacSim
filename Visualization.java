@@ -82,11 +82,13 @@ public class Visualization {
 
         // Render agents
         for (Point2D p : simulator.getAgentPositions()) {
+            System.out.println(p);
             Circle agentCircle = new Circle(p.getX() * scaleX, p.getY() * scaleY, 5, Color.BLUE);
             renderPane.getChildren().add(agentCircle);
         }
 
         // Render obstacles
+        /*
         for (Point2D p : simulator.getObstaclePositions()) {
             Rectangle obsRect = new Rectangle(p.getX() * scaleX, p.getY() * scaleY, 10, 10);
             obsRect.setFill(Color.GRAY);
@@ -99,5 +101,6 @@ public class Visualization {
             exitRect.setFill(Color.GREEN);
             renderPane.getChildren().add(exitRect);
         }
+        */
     }
 }

@@ -1,6 +1,4 @@
 import javafx.geometry.Point2D;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class Magnet implements IMagnet{
@@ -9,18 +7,22 @@ public class Magnet implements IMagnet{
     private final double force_wall;
     private final double force_exit;
     private final double force_object;
+    private final int maxX;
+    private final int maxY;
 
-    public Magnet(double force_agent, double force_wall, double force_exit, double force_object) {
+    public Magnet(double force_agent, double force_wall, double force_exit, double force_object, int maxX, int maxY) {
         this.force_agent = force_agent;
         this.force_wall = force_wall;
         this.force_exit = force_exit;
         this.force_object = force_object;
+        this.maxX = maxX;
+        this.maxY = maxY;
     }
 
     @Override
     public Point2D computeResultForce(Agent agent, List<Agent> agents, List<Obstacle> obstacles, List<Exit> exits) {
         Point2D result_force = new Point2D(0, 0);
-        Point2D agent_pos = new Point2D(agent.getPosition().getX(), agent.getPosition().getY());
+        Point2D agent_pos = agent.getPosition();
 
         if (obstacles != null) {
             for (Obstacle obs : obstacles) {
@@ -32,7 +34,7 @@ public class Magnet implements IMagnet{
                     double dy = obs.distanceTo(agent_pos.add(0, epsilon)) - distance;
 
                     Point2D gradient = new Point2D(dx, dy).normalize();
-                    Point2D repulse = gradient.multiply(force_wall / (distance * distance));
+                    Point2D repulse = gradient.multiply(force_object / (distance * distance));
 
                     result_force = result_force.add(repulse);
                 }
@@ -68,8 +70,29 @@ public class Magnet implements IMagnet{
                 result_force = result_force.add(attract);
             }
         }
+        /*
+        double x = agent_pos.getX();
+        double y = agent_pos.getY();
+        double wallThreshold = 2.0;
+        double epsilon = 0.001; // Small value to avoid division by zero
 
-
+        // Left wall
+        if (x < wallThreshold) {
+            result_force = result_force.add(new Point2D(force_wall / (x * x + epsilon), 0));
+        }
+        // Right wall
+        if (x > maxX - wallThreshold) {
+            result_force = result_force.add(new Point2D(-force_wall / ((maxX - x) * (maxX - x) + epsilon), 0));
+        }
+        // Bottom wall
+        if (y < wallThreshold) {
+            result_force = result_force.add(new Point2D(0, force_wall / (y * y + epsilon)));
+        }
+        // Top wall
+        if (y > maxY - wallThreshold) {
+            result_force = result_force.add(new Point2D(0, -force_wall / ((maxY - y) * (maxY - y) + epsilon)));
+        }
+        */
         return result_force;
     }
 }

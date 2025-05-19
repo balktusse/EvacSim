@@ -2,11 +2,15 @@ import javafx.geometry.Point2D;
 
 public class Agent implements IAgent{
 
-    private int id;
+    private final int id;
     private boolean status;
     private Point2D position;
     private Point2D velocity;
-    private static final double MAX_SPEED = 5.0;
+    private static final double MAX_SPEED = 3.0;
+    private static final double margin = 1.0;
+
+    private static final double MAP_WIDTH = 400;
+    private static final double MAP_HEIGHT = 400;
 
     public Agent(int id, Point2D start_position){
         this.id = id;
@@ -23,7 +27,12 @@ public class Agent implements IAgent{
     public boolean getStatus() { return this.status; }
 
     @Override
-    public void step() { this.position = this.position.add(this.velocity);
+    public void step() {
+        this.position = this.position.add(this.velocity);
+
+        double x = Math.max(margin, Math.min(position.getX(), MAP_WIDTH - margin));
+        double y = Math.max(margin, Math.min(position.getY(), MAP_HEIGHT - margin));
+        this.position = new Point2D(x, y);
     }
 
     @Override

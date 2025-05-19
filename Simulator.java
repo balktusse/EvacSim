@@ -104,6 +104,18 @@ public class Simulator {
         }
     }
 
+    public void createMap(){
+        environment.setMap(400, 400);
+    }
+
+    public void addAgents(int number){
+        environment.addAgents(number);
+    }
+
+    public void magnet(){
+        environment.setMagnet(2, 2, 2,1);
+    }
+
     public boolean isRunning(){
         return running;
     }
