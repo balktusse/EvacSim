@@ -14,6 +14,13 @@ public class Environment implements IEnvironment{
         this.agents = new ArrayList<>();
         this.obstacles = new ArrayList<>();
         this.exits = new ArrayList<>();
+        // the walls
+        addObstacle(new Point2D(0, 0), new Point2D(10, 50));
+        addObstacle(new Point2D(0, 60), new Point2D(10, 400));
+
+        //addObstacle(new Point2D(0, 0), new Point2D(0, 45));
+        //addObstacle(new Point2D(0, 0), new Point2D(0, 45));
+        //addObstacle(new Point2D(0, 0), new Point2D(0, 45));
     }
 
     public void update() {

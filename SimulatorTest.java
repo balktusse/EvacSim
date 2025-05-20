@@ -9,9 +9,12 @@ public class SimulatorTest extends Application {
         Simulator simulator = new Simulator();
         simulator.magnet();
         simulator.createMap();
+        //simulator.createObstacle(new Point2D(0, 0), new Point2D(5, 50));
+        //simulator.createObstacle(new Point2D(0, 60), new Point2D(5, 400));
+
         simulator.createObstacle(new Point2D(200, 300), new Point2D(180, 200));
         simulator.createObstacle(new Point2D(50, 50), new Point2D(51, 51));
-        simulator.createExit(new Point2D(0, 50), new Point2D(0, 60));
+        simulator.createExit(new Point2D(0, 50), new Point2D(3, 60));
         simulator.addAgents(1000);
         System.out.println("Agents in environment: " + simulator.getAgentPositions().size());
 

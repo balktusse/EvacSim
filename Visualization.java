@@ -49,8 +49,8 @@ public class Visualization {
         primaryStage.show();
 
         // Adjust scaling based on map size (assuming map is 100x100; adjust as needed)
-        scaleX = 400.0 / 100.0; // Map width to pane width
-        scaleY = 400.0 / 100.0; // Map height to pane height
+        scaleX = 400.0 / 200.0; // Map width to pane width
+        scaleY = 400.0 / 200.0; // Map height to pane height
 
         startRenderingLoop();
     }
@@ -90,7 +90,7 @@ public class Visualization {
         // Render obstacles
 
         for (Point2D p : simulator.getObstaclePositions()) {
-            Rectangle obsRect = new Rectangle(p.getX() * scaleX, p.getY() * scaleY, 10, 10);
+            Rectangle obsRect = new Rectangle(p.getX() * scaleX, p.getY() * scaleY, 2, 2);
             obsRect.setFill(Color.GRAY);
             renderPane.getChildren().add(obsRect);
         }
@@ -98,7 +98,7 @@ public class Visualization {
 
         // Render exits
         for (Point2D p : simulator.getExitPositions()) {
-            Rectangle exitRect = new Rectangle(p.getX() * scaleX, p.getY() * scaleY, 15, 15);
+            Rectangle exitRect = new Rectangle(p.getX() * scaleX, p.getY() * scaleY, 2, 2);
             exitRect.setFill(Color.GREEN);
             renderPane.getChildren().add(exitRect);
         }

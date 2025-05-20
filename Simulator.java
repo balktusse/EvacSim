@@ -104,18 +104,6 @@ public class Simulator {
         }
     }
 
-    public void createMap(){
-        environment.setMap(400, 400);
-    }
-
-    public void createObstacle(Point2D top_right, Point2D bottom_left){
-        environment.addObstacle(top_right, bottom_left);
-    }
-
-    public void createExit(Point2D left, Point2D right){
-        environment.addExit(left, right, 1000);
-    }
-
     public void addAgents(int number){
         environment.addAgents(number);
     }
