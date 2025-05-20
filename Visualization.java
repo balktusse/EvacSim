@@ -49,13 +49,16 @@ public class Visualization {
         primaryStage.show();
 
         // Adjust scaling based on map size (assuming map is 100x100; adjust as needed)
-        scaleX = 400.0 / 100.0; // Map width to pane width
-        scaleY = 400.0 / 100.0; // Map height to pane height
+        scaleX = 400.0 / 200.0; // Map width to pane width
+        scaleY = 400.0 / 200.0; // Map height to pane height
+
+        renderStaticObjects();
 
         startRenderingLoop();
     }
 
     private void startRenderingLoop() {
+
         Thread renderThread = new Thread(() -> {
             try {
                 while (!Thread.currentThread().isInterrupted()) {
@@ -78,30 +81,32 @@ public class Visualization {
     }
 
     private void render() {
-        renderPane.getChildren().clear();
+        // Clear only agent nodes
+        renderPane.getChildren().removeIf(node -> node instanceof Circle);
+        //renderPane.getChildren().clear();
 
         // Render agents
         for (Point2D p : simulator.getAgentPositions()) {
-            System.out.println(p);
             Circle agentCircle = new Circle(p.getX() * scaleX, p.getY() * scaleY, 5, Color.BLUE);
             renderPane.getChildren().add(agentCircle);
         }
 
-        // Render obstacles
+    }
 
+    private void renderStaticObjects() {
+        // Render obstacles once
         for (Point2D p : simulator.getObstaclePositions()) {
-            Rectangle obsRect = new Rectangle(p.getX() * scaleX, p.getY() * scaleY, 10, 10);
+            Rectangle obsRect = new Rectangle(p.getX() * scaleX, p.getY() * scaleY, 2, 2);
             obsRect.setFill(Color.GRAY);
             renderPane.getChildren().add(obsRect);
         }
 
-
-        // Render exits
+        // Render exits once
         for (Point2D p : simulator.getExitPositions()) {
-            Rectangle exitRect = new Rectangle(p.getX() * scaleX, p.getY() * scaleY, 15, 15);
+            Rectangle exitRect = new Rectangle(p.getX() * scaleX, p.getY() * scaleY, 2, 2);
             exitRect.setFill(Color.GREEN);
             renderPane.getChildren().add(exitRect);
         }
-
     }
+
 }

@@ -34,9 +34,14 @@ public class Exit implements IExit{
     }
 
     @Override
-    public double distanceTo(Point2D other_position){
-        double clampedX = clamp(other_position.getX(), position.get(1).getX(), position.get(0).getX());
-        double clampedY = clamp(other_position.getY(), position.get(1).getY(), position.get(0).getY());
+    public double distanceTo(Point2D other_position) {
+        double x1 = Math.min(position.get(0).getX(), position.get(1).getX());
+        double x2 = Math.max(position.get(0).getX(), position.get(1).getX());
+        double y1 = Math.min(position.get(0).getY(), position.get(1).getY());
+        double y2 = Math.max(position.get(0).getY(), position.get(1).getY());
+
+        double clampedX = clamp(other_position.getX(), x1, x2);
+        double clampedY = clamp(other_position.getY(), y1, y2);
 
         return other_position.distance(clampedX, clampedY);
     }

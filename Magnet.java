@@ -55,25 +55,34 @@ public class Magnet implements IMagnet{
             }
         }
 
+        // Find the closest exit
+        Exit closestExit = null;
+        double minDistance = Double.MAX_VALUE;
+
         for (Exit exit : exits) {
             double distance = exit.distanceTo(agent_pos);
-            if (distance != 0) {
-                // Estimate direction toward the exit via gradient
-                double epsilon = 0.001;
-
-                double dx = exit.distanceTo(agent_pos.add(epsilon, 0)) - distance;
-                double dy = exit.distanceTo(agent_pos.add(0, epsilon)) - distance;
-
-                Point2D gradient = new Point2D(dx, dy).normalize();
-                Point2D attract = gradient.multiply(-force_exit / distance);  // negative gradient = attraction
-
-                result_force = result_force.add(attract);
+            if (distance < minDistance) {
+                minDistance = distance;
+                closestExit = exit;
             }
+        }
+
+        // Apply force from only the closest exit
+        if (closestExit != null && minDistance > 0) {
+            double epsilon = 0.001;
+
+            double dx = closestExit.distanceTo(agent_pos.add(epsilon, 0)) - minDistance;
+            double dy = closestExit.distanceTo(agent_pos.add(0, epsilon)) - minDistance;
+
+            Point2D gradient = new Point2D(dx, dy).normalize();
+            Point2D attract = gradient.multiply(-force_exit);
+
+            result_force = result_force.add(attract);
         }
 
         double x = agent_pos.getX();
         double y = agent_pos.getY();
-        double wallThreshold = 2.0;
+        double wallThreshold = 1.0;
         double epsilon = 0.001; // Small value to avoid division by zero
 
         // Left wall

@@ -18,8 +18,13 @@ public class Obstacle implements IObstacle{
 
     @Override
     public double distanceTo(Point2D other_position){
-        double clampedX = clamp(other_position.getX(), points.get(1).getX(), points.get(0).getX());
-        double clampedY = clamp(other_position.getY(), points.get(1).getY(), points.get(0).getY());
+        double x1 = Math.min(points.get(0).getX(), points.get(1).getX());
+        double x2 = Math.max(points.get(0).getX(), points.get(1).getX());
+        double y1 = Math.min(points.get(0).getY(), points.get(1).getY());
+        double y2 = Math.max(points.get(0).getY(), points.get(1).getY());
+
+        double clampedX = clamp(other_position.getX(), x1, x2);
+        double clampedY = clamp(other_position.getY(), y1, y2);
 
         return other_position.distance(clampedX, clampedY);
     }

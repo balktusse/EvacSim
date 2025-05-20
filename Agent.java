@@ -9,7 +9,7 @@ public class Agent implements IAgent{
     private static final double MAX_SPEED = 3.0;
     private static final double margin = 1.0;
 
-    private static final double MAP_WIDTH = 400;
+    private static final double MAP_WIDTH = 800;
     private static final double MAP_HEIGHT = 400;
 
     public Agent(int id, Point2D start_position){
@@ -42,7 +42,8 @@ public class Agent implements IAgent{
 
     @Override
     public void applyForce(Point2D force) {
-        this.velocity = this.velocity.add(force);
+        double damping = 0.95;
+        this.velocity = this.velocity.multiply(damping).add(force);
         if (velocity.magnitude() > MAX_SPEED) {
             velocity = velocity.normalize().multiply(MAX_SPEED);
         }

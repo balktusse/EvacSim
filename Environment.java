@@ -14,14 +14,46 @@ public class Environment implements IEnvironment{
         this.agents = new ArrayList<>();
         this.obstacles = new ArrayList<>();
         this.exits = new ArrayList<>();
+
+        setMap(800, 400);
+        setMagnet(2, 1, 1, 4);
+
+        //Left wall
+        addObstacle(new Point2D(0, 0), new Point2D(3, 49));
+        addExit(new Point2D(0, 50), new Point2D(5, 80),1000);
+        addObstacle(new Point2D(0, 81), new Point2D(3, 400));
+        //Bottom wall
+        addObstacle(new Point2D(4, 397), new Point2D(69, 400));
+        addExit(new Point2D(70, 395), new Point2D(100, 400),1000);
+        addObstacle(new Point2D(101, 397), new Point2D(800, 400));
+        //Right wall
+        addObstacle(new Point2D(797, 0), new Point2D(800, 397));
+        //Top wall
+        addObstacle(new Point2D(4, 0), new Point2D(629, 3));
+        addExit(new Point2D(630, 0), new Point2D(660, 5),1000);
+        addObstacle(new Point2D(661, 0), new Point2D(796, 3));
+
+        addObstacle(new Point2D(230, 4), new Point2D(233, 100));
+        addObstacle(new Point2D(3, 397), new Point2D(800, 400));
+
+        addExit(new Point2D(50, 50), new Point2D(75, 75),1000);
+
     }
 
     public void update() {
         if (map != null) {
             for (Agent agent : agents) {
+                if (agent.getStatus()) continue;
+
                 Point2D force = magnet.computeResultForce(agent, agents, obstacles, exits);
                 agent.applyForce(force);
                 agent.step();
+
+                for (Exit exit : exits){
+                    if(exit.distanceTo(agent.getPosition()) < 1){
+                        agent.changeStatus(true);
+                    }
+                }
             }
         }
     }
@@ -89,7 +121,7 @@ public class Environment implements IEnvironment{
 
     @Override
     public void setMagnet(double force_agent, double force_wall, double force_exit, double force_object){
-        this.magnet = new Magnet(force_agent, force_wall, force_exit, force_object, 400, 400);
+        this.magnet = new Magnet(force_agent, force_wall, force_exit, force_object, 800, 400);
     }
 
     @Override
@@ -103,7 +135,21 @@ public class Environment implements IEnvironment{
             if(agent.getPosition().equals(position)){ return false; }
         }
         for(Obstacle obstacle : obstacles){
-            if(obstacle.getPosition().equals(position)){ return false; }
+            List<Point2D> points = obstacle.getPosition();
+
+            Point2D p1 = points.get(0);
+            Point2D p2 = points.get(1);
+
+            double minX = Math.min(p1.getX(), p2.getX());
+            double maxX = Math.max(p1.getX(), p2.getX());
+            double minY = Math.min(p1.getY(), p2.getY());
+            double maxY = Math.max(p1.getY(), p2.getY());
+
+            if (position.getX() >= minX && position.getX() <= maxX &&
+                    position.getY() >= minY && position.getY() <= maxY) {
+                return false;
+            }
+
         }
         return true;
     }
