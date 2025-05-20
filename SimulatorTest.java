@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.geometry.Point2D;
 import javafx.stage.Stage;
 
 public class SimulatorTest extends Application {
@@ -8,7 +9,9 @@ public class SimulatorTest extends Application {
         Simulator simulator = new Simulator();
         simulator.magnet();
         simulator.createMap();
-        simulator.createObstacle();
+        simulator.createObstacle(new Point2D(200, 300), new Point2D(180, 200));
+        simulator.createObstacle(new Point2D(50, 50), new Point2D(51, 51));
+        simulator.createExit(new Point2D(0, 50), new Point2D(0, 60));
         simulator.addAgents(1000);
         System.out.println("Agents in environment: " + simulator.getAgentPositions().size());
 

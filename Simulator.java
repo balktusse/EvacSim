@@ -108,10 +108,12 @@ public class Simulator {
         environment.setMap(400, 400);
     }
 
-    public void createObstacle(){
-        Point2D top_right = new Point2D(20, 20);
-        Point2D bottom_left = new Point2D(40, 60);
+    public void createObstacle(Point2D top_right, Point2D bottom_left){
         environment.addObstacle(top_right, bottom_left);
+    }
+
+    public void createExit(Point2D left, Point2D right){
+        environment.addExit(left, right, 1000);
     }
 
     public void addAgents(int number){
@@ -119,7 +121,7 @@ public class Simulator {
     }
 
     public void magnet(){
-        environment.setMagnet(2, 2, 2,5);
+        environment.setMagnet(2, 2, 5,5);
     }
 
     public boolean isRunning(){
@@ -135,11 +137,11 @@ public class Simulator {
     }
 
     public List<Point2D> getObstaclePositions(){
-        return environment.getObstaclePosition();
+        return environment.getObstaclePositions();
     }
 
-    public List<Exit> getExitPositions(){
-        return environment.getExits();  
+    public List<Point2D> getExitPositions(){
+        return environment.getExitPositions();
     }
 
 }

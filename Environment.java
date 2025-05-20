@@ -126,10 +126,32 @@ public class Environment implements IEnvironment{
         return positions;
     }
 
-    public List<Point2D> getObstaclePosition(){
+    public List<Point2D> getObstaclePositions(){
         List<Point2D> positions = new ArrayList<>();
         for (Obstacle obstacle : obstacles) {
             List<Point2D> points = obstacle.getPosition();  // should return 2 points
+
+            Point2D p1 = points.get(0);
+            Point2D p2 = points.get(1);
+
+            int x1 = (int) Math.floor(Math.min(p1.getX(), p2.getX()));
+            int x2 = (int) Math.ceil(Math.max(p1.getX(), p2.getX()));
+            int y1 = (int) Math.floor(Math.min(p1.getY(), p2.getY()));
+            int y2 = (int) Math.ceil(Math.max(p1.getY(), p2.getY()));
+
+            for (int x = x1; x <= x2; x++) {
+                for (int y = y1; y <= y2; y++) {
+                    positions.add(new Point2D(x, y));
+                }
+            }
+        }
+        return positions;
+    }
+
+    public List<Point2D> getExitPositions(){
+        List<Point2D> positions = new ArrayList<>();
+        for (Exit exit : exits) {
+            List<Point2D> points = exit.getPosition();  // should return 2 points
 
             Point2D p1 = points.get(0);
             Point2D p2 = points.get(1);
