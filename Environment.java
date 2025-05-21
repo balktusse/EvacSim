@@ -8,6 +8,7 @@ public class Environment implements IEnvironment {
     private List<Obstacle> obstacles;
     private List<Exit> exits;
     private List<Attractor> attractors;
+    private List<Repeller> repellers;
     private Map map;
     private Magnet magnet;
 
@@ -16,9 +17,10 @@ public class Environment implements IEnvironment {
         this.obstacles = new ArrayList<>();
         this.exits = new ArrayList<>();
         this.attractors = new ArrayList<>();
+        this.repellers = new ArrayList<>();
 
         setMap(800, 400);
-        setMagnet(1, 1, 1, 4, 0.5); // Added force_attractor parameter
+        setMagnet(1, 0.8, 1.5, 0.3, 0.3); // Added force_attractor parameter
 
         //Left wall
         addObstacle(new Point2D(0, 0), new Point2D(3, 49));
@@ -58,10 +60,13 @@ public class Environment implements IEnvironment {
         // right one
         addObstacle(new Point2D(570, 270), new Point2D(680, 340));
 
-        addAttractor(new Point2D(230, 300), 1000);
-        addAttractor(new Point2D(430, 200), 1000);
-        addAttractor(new Point2D(430, 300), 1000);
-
+        addAttractor(new Point2D(244, 243));
+        addAttractor(new Point2D(500, 190));
+        addRepeller(new Point2D(150, 150));
+        addRepeller(new Point2D(680, 340));
+        addRepeller(new Point2D(330, 330));
+        addRepeller(new Point2D(480, 4));
+        addRepeller(new Point2D(797, 183));
     }
 
     public void update() {
@@ -69,7 +74,7 @@ public class Environment implements IEnvironment {
             for (Agent agent : agents) {
                 if (agent.getStatus()) continue;
 
-                Point2D force = magnet.computeResultForce(agent, agents, obstacles, exits, attractors);
+                Point2D force = magnet.computeResultForce(agent, agents, obstacles, exits, attractors, repellers);
                 agent.applyForce(force);
                 agent.step();
 
@@ -142,15 +147,21 @@ public class Environment implements IEnvironment {
         exits.add(exit);
     }
 
-    public void addAttractor(Point2D position, int capacity) {
+    public void addAttractor(Point2D position) {
         int id = attractors.size();
-        Attractor attractor = new Attractor(id, position, capacity);
+        Attractor attractor = new Attractor(id, position);
         attractors.add(attractor);
     }
 
+    public void addRepeller(Point2D position){
+        int id = repellers.size();
+        Repeller repeller = new Repeller(id, position);
+        repellers.add(repeller);
+    }
+
     @Override
-    public void setMagnet(double force_agent, double force_wall, double force_exit, double force_object, double force_attractor) {
-        this.magnet = new Magnet(force_agent, force_wall, force_exit, force_object, force_attractor, 800, 400);
+    public void setMagnet(double force_agent, double force_exit, double force_object, double force_attractor, double force_repeller) {
+        this.magnet = new Magnet(force_agent, force_exit, force_object, force_attractor, force_repeller);
     }
 
     @Override

@@ -42,7 +42,7 @@ public class Visualization {
         root.setCenter(renderPane);
         root.setBottom(controls);
 
-        Scene scene = new Scene(root, 500, 500);
+        Scene scene = new Scene(root, 1650, 850);
 
         primaryStage.setTitle("Simulation Visualization");
         primaryStage.setScene(scene);
