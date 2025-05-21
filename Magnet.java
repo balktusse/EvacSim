@@ -43,7 +43,7 @@ public class Magnet implements IMagnet{
                     Point2D vecFromCorner = agent_pos.subtract(forceCorner);
                     double distFromCorner = vecFromCorner.magnitude();
 
-                    double cornerForceStrength = 50.0; // You can tune this value
+                    double cornerForceStrength = 100.0; // You can tune this value
 
                     if (distFromCorner > epsilon) {
                         Point2D repel = vecFromCorner.normalize()
