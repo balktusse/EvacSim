@@ -76,7 +76,7 @@ public class Magnet implements IMagnet{
             double dy = closestExit.distanceTo(agent_pos.add(0, epsilon)) - minDistance;
 
             Point2D gradient = new Point2D(dx, dy).normalize();
-            Point2D attract = gradient.multiply(-force_exit);
+            Point2D attract = gradient.multiply(-force_exit/10);
 
             result_force = result_force.add(attract);
         }
@@ -92,7 +92,7 @@ public class Magnet implements IMagnet{
                     double dy = attractor.distanceTo(agent_pos.add(0, epsilon)) - distance;
 
                     Point2D gradient = new Point2D(dx, dy).normalize();
-                    Point2D attract = gradient.multiply(-force_attractor);
+                    Point2D attract = gradient.multiply(-force_attractor/10);
 
                     result_force = result_force.add(attract);
                 }

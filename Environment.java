@@ -18,7 +18,7 @@ public class Environment implements IEnvironment {
         this.attractors = new ArrayList<>();
 
         setMap(800, 400);
-        setMagnet(2, 1, 4, 100, 0.5); // Added force_attractor parameter
+        setMagnet(2, 1, 4, 3, 0.5); // Added force_attractor parameter
 
         //Left wall
         addObstacle(new Point2D(0, 0), new Point2D(3, 49));
