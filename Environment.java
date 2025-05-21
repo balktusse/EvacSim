@@ -33,10 +33,31 @@ public class Environment implements IEnvironment{
         addExit(new Point2D(630, 0), new Point2D(660, 5),1000);
         addObstacle(new Point2D(661, 0), new Point2D(796, 3));
 
-        addObstacle(new Point2D(230, 4), new Point2D(233, 100));
-        addObstacle(new Point2D(3, 397), new Point2D(800, 400));
+        // upper inner walls 
+        addObstacle(new Point2D(240, 4), new Point2D(243, 175));
+        addObstacle(new Point2D(480, 4), new Point2D(483, 90));
 
-        addExit(new Point2D(50, 50), new Point2D(75, 75),1000);
+        // left inner wall(s)
+        addObstacle(new Point2D(4, 240), new Point2D(90, 243));
+
+        // right inner wall(s)
+        addObstacle(new Point2D(580, 180), new Point2D(797, 183));
+
+        // bottom inner wall(s)
+        addObstacle(new Point2D(450, 280), new Point2D(453, 397));
+
+        /* ~~~)}------- <| 0b$7acl£$ |> ------{(~~~ */
+        // top left
+        addObstacle(new Point2D(90, 90), new Point2D(150, 150));
+
+        // middle one
+        addObstacle(new Point2D(300, 300), new Point2D(330, 330));
+
+        // right one
+        addObstacle(new Point2D(570, 270), new Point2D(680, 340));
+
+        // big ass exit
+        //addExit(new Point2D(50, 50), new Point2D(75, 75),1000);
 
     }
 
