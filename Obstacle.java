@@ -5,15 +5,19 @@ import java.util.List;
 
 public class Obstacle implements IObstacle{
     private final List<Point2D> points;
+    private Point2D force_corner;
 
     private double clamp(double value, double min, double max) {
         return Math.max(min, Math.min(value, max));
     }
 
-    public Obstacle(Point2D top_right, Point2D bottom_left){
+    public Obstacle(Point2D top_right, Point2D bottom_left, Point2D force_corner){
         this.points = new ArrayList<>();
         this.points.add(top_right);
         this.points.add(bottom_left);
+        if(force_corner != null && (force_corner.equals(points.get(0)) || force_corner.equals(points.get(1)))){
+            this.force_corner = force_corner;
+        }
     }
 
     @Override
@@ -33,4 +37,14 @@ public class Obstacle implements IObstacle{
     public List<Point2D> getPosition(){
         return this.points;
     }
+
+    public void setForceCorner(Point2D force_corner){
+        if(force_corner.equals(points.get(0)) || force_corner.equals(points.get(1))){
+            this.force_corner = force_corner;
+        }
+    }
+
+    public Point2D getForceCorner(){ return this.force_corner; }
 }
+
+
