@@ -102,10 +102,11 @@ public class Visualization {
         root.setCenter(renderPane);
         root.setBottom(controls);
 
-        Scene simulationScene = new Scene(root, 500, 500);
+        Scene simulationScene = new Scene(root, 1650, 850);
 
         primaryStage.setTitle("Simulation Visualization");
         primaryStage.setScene(simulationScene);
+        primaryStage.centerOnScreen();
 
         // Adjust scaling based on map size (adjust 200.0 to match your map size)
         scaleX = 400.0 / 200.0;
@@ -133,7 +134,7 @@ public class Visualization {
         Thread renderThread = new Thread(() -> {
             try {
                 while (!Thread.currentThread().isInterrupted()) {
-                    Thread.sleep(100);
+                    Thread.sleep(50);
                     if (simulator.isRunning() && !simulator.isPaused()) {
                         Platform.runLater(() -> {
                             simulator.update();
