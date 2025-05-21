@@ -19,23 +19,45 @@ public class Environment implements IEnvironment{
         setMagnet(2, 1, 1, 4);
 
         //Left wall
-        addObstacle(new Point2D(0, 0), new Point2D(3, 49), null);
+        addObstacle(new Point2D(0, 0), new Point2D(3, 49));
         addExit(new Point2D(0, 50), new Point2D(5, 80),1000);
-        addObstacle(new Point2D(0, 81), new Point2D(3, 400), null);
+        addObstacle(new Point2D(0, 81), new Point2D(3, 400));
         //Bottom wall
-        addObstacle(new Point2D(4, 397), new Point2D(69, 400), null);
+        addObstacle(new Point2D(4, 397), new Point2D(69, 400));
         addExit(new Point2D(70, 395), new Point2D(100, 400),1000);
-        addObstacle(new Point2D(101, 397), new Point2D(800, 400), null);
+        addObstacle(new Point2D(101, 397), new Point2D(800, 400));
         //Right wall
-        addObstacle(new Point2D(797, 0), new Point2D(800, 397), null);
+        addObstacle(new Point2D(797, 0), new Point2D(800, 397));
         //Top wall
-        addObstacle(new Point2D(4, 0), new Point2D(629, 3), null);
+        addObstacle(new Point2D(4, 0), new Point2D(629, 3));
         addExit(new Point2D(630, 0), new Point2D(660, 5),1000);
-        addObstacle(new Point2D(661, 0), new Point2D(796, 3), null);
+        addObstacle(new Point2D(661, 0), new Point2D(796, 3));
 
-        addObstacle(new Point2D(230, 4), new Point2D(233, 100), new Point2D(233, 4));
-        addObstacle(new Point2D(3, 397), new Point2D(800, 400), null);
+        // upper inner walls 
+        addObstacle(new Point2D(240, 4), new Point2D(243, 175));
+        addObstacle(new Point2D(480, 4), new Point2D(483, 90));
 
+        // left inner wall(s)
+        addObstacle(new Point2D(4, 240), new Point2D(90, 243));
+
+        // right inner wall(s)
+        addObstacle(new Point2D(580, 180), new Point2D(797, 183));
+
+        // bottom inner wall(s)
+        addObstacle(new Point2D(450, 280), new Point2D(453, 397));
+
+        /* ~~~)}------- <| 0b$7acl£$ |> ------{(~~~ */
+        // top left
+        addObstacle(new Point2D(90, 90), new Point2D(150, 150));
+
+        // middle one
+        addObstacle(new Point2D(300, 300), new Point2D(330, 330));
+
+        // right one
+        addObstacle(new Point2D(570, 270), new Point2D(680, 340));
+
+        // big ass exit
+        //addExit(new Point2D(50, 50), new Point2D(75, 75),1000);
 
     }
 
@@ -81,7 +103,7 @@ public class Environment implements IEnvironment{
     }
 
     @Override
-    public void addObstacle(Point2D top_right, Point2D bottom_left, Point2D force_corner){
+    public void addObstacle(Point2D top_right, Point2D bottom_left){
         if (this.map == null) {
             System.out.println("Map must be set before adding obstacles.");
             return;
@@ -107,7 +129,7 @@ public class Environment implements IEnvironment{
             }
         }
 
-        Obstacle obstacle = new Obstacle(top_right, bottom_left, force_corner);
+        Obstacle obstacle = new Obstacle(top_right, bottom_left);
         obstacles.add(obstacle);
     }
 
