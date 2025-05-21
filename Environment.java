@@ -18,29 +18,49 @@ public class Environment implements IEnvironment {
         this.attractors = new ArrayList<>();
 
         setMap(800, 400);
-        setMagnet(2, 1, 4, 3, 0.5); // Added force_attractor parameter
+        setMagnet(1, 1, 1, 4, 0.5); // Added force_attractor parameter
 
         //Left wall
         addObstacle(new Point2D(0, 0), new Point2D(3, 49));
-        addExit(new Point2D(0, 50), new Point2D(5, 80), 1000);
+        addExit(new Point2D(0, 50), new Point2D(5, 80),1000);
         addObstacle(new Point2D(0, 81), new Point2D(3, 400));
         //Bottom wall
         addObstacle(new Point2D(4, 397), new Point2D(69, 400));
-        addExit(new Point2D(70, 395), new Point2D(100, 400), 1000);
+        addExit(new Point2D(70, 395), new Point2D(100, 400),1000);
         addObstacle(new Point2D(101, 397), new Point2D(800, 400));
         //Right wall
         addObstacle(new Point2D(797, 0), new Point2D(800, 397));
         //Top wall
         addObstacle(new Point2D(4, 0), new Point2D(629, 3));
-        addExit(new Point2D(630, 0), new Point2D(660, 5), 1000);
+        addExit(new Point2D(630, 0), new Point2D(660, 5),1000);
         addObstacle(new Point2D(661, 0), new Point2D(796, 3));
 
-        addObstacle(new Point2D(230, 4), new Point2D(233, 100));
-        addObstacle(new Point2D(3, 397), new Point2D(800, 400));
+        // upper inner walls
+        addObstacle(new Point2D(240, 4), new Point2D(243, 175));
+        addObstacle(new Point2D(480, 4), new Point2D(483, 90));
 
-        //addExit(new Point2D(50, 50), new Point2D(75, 75), 1000);
+        // left inner wall(s)
+        addObstacle(new Point2D(4, 240), new Point2D(90, 243));
 
-        addAttractor(new Point2D(230, 200), 1000);
+        // right inner wall(s)
+        addObstacle(new Point2D(580, 180), new Point2D(797, 183));
+
+        // bottom inner wall(s)
+        addObstacle(new Point2D(450, 280), new Point2D(453, 397));
+
+        /* ~~~)}------- <| 0b$7acl£$ |> ------{(~~~ */
+        // top left
+        addObstacle(new Point2D(90, 90), new Point2D(150, 150));
+
+        // middle one
+        addObstacle(new Point2D(300, 300), new Point2D(330, 330));
+
+        // right one
+        addObstacle(new Point2D(570, 270), new Point2D(680, 340));
+
+        addAttractor(new Point2D(230, 300), 1000);
+        addAttractor(new Point2D(430, 200), 1000);
+        addAttractor(new Point2D(430, 300), 1000);
 
     }
 

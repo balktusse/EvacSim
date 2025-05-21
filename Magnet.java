@@ -92,7 +92,7 @@ public class Magnet implements IMagnet{
                     double dy = attractor.distanceTo(agent_pos.add(0, epsilon)) - distance;
 
                     Point2D gradient = new Point2D(dx, dy).normalize();
-                    Point2D attract = gradient.multiply(-force_attractor/10);
+                    Point2D attract = gradient.multiply(-force_attractor/20);
 
                     result_force = result_force.add(attract);
                 }
