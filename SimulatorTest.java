@@ -7,7 +7,7 @@ public class SimulatorTest extends Application {
     @Override
     public void start(Stage primaryStage) throws InterruptedException {
         Simulator simulator = new Simulator();
-        simulator.addAgents(1000);
+        //simulator.addAgents(1000);
         System.out.println("Agents in environment: " + simulator.getAgentPositions().size());
 
         Visualization visualization = new Visualization(simulator);
