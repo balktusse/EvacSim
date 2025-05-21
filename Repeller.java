@@ -1,10 +1,10 @@
 import javafx.geometry.Point2D;
 
-public class Attractor implements IAttractor {
+public class Repeller implements IRepeller{
     private final int id;
     private final Point2D position;
 
-    public Attractor(int id, Point2D position) {
+    public Repeller(int id, Point2D position) {
         this.id = id;
         this.position = position;
     }
