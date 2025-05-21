@@ -2,25 +2,26 @@ import javafx.geometry.Point2D;
 import java.util.List;
 
 public class Magnet implements IMagnet{
-
     private final double force_agent;
     private final double force_wall;
     private final double force_exit;
     private final double force_object;
+    private final double force_attractor;
     private final int maxX;
     private final int maxY;
 
-    public Magnet(double force_agent, double force_wall, double force_exit, double force_object, int maxX, int maxY) {
+    public Magnet(double force_agent, double force_wall, double force_exit, double force_object, double force_attractor, int maxX, int maxY) {
         this.force_agent = force_agent;
         this.force_wall = force_wall;
         this.force_exit = force_exit;
         this.force_object = force_object;
+        this.force_attractor = force_attractor;
         this.maxX = maxX;
         this.maxY = maxY;
     }
 
     @Override
-    public Point2D computeResultForce(Agent agent, List<Agent> agents, List<Obstacle> obstacles, List<Exit> exits) {
+    public Point2D computeResultForce(Agent agent, List<Agent> agents, List<Obstacle> obstacles, List<Exit> exits, List<Attractor> attractors) {
         Point2D result_force = new Point2D(0, 0);
         Point2D agent_pos = agent.getPosition();
 
@@ -78,6 +79,24 @@ public class Magnet implements IMagnet{
             Point2D attract = gradient.multiply(-force_exit);
 
             result_force = result_force.add(attract);
+        }
+
+        // Apply force from all attractors
+        if (attractors != null) {
+            for (Attractor attractor : attractors) {
+                double distance = attractor.distanceTo(agent_pos);
+                if (distance > 0) {
+                    double epsilon = 0.001;
+
+                    double dx = attractor.distanceTo(agent_pos.add(epsilon, 0)) - distance;
+                    double dy = attractor.distanceTo(agent_pos.add(0, epsilon)) - distance;
+
+                    Point2D gradient = new Point2D(dx, dy).normalize();
+                    Point2D attract = gradient.multiply(-force_attractor);
+
+                    result_force = result_force.add(attract);
+                }
+            }
         }
 
         double x = agent_pos.getX();
