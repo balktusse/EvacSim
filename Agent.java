@@ -7,10 +7,7 @@ public class Agent implements IAgent{
     private Point2D position;
     private Point2D velocity;
     private static final double MAX_SPEED = 3.0;
-    private static final double margin = 1.0;
 
-    private static final double MAP_WIDTH = 800;
-    private static final double MAP_HEIGHT = 400;
 
     public Agent(int id, Point2D start_position){
         this.id = id;
@@ -30,9 +27,6 @@ public class Agent implements IAgent{
     public void step() {
         this.position = this.position.add(this.velocity);
 
-        double x = Math.max(margin, Math.min(position.getX(), MAP_WIDTH - margin));
-        double y = Math.max(margin, Math.min(position.getY(), MAP_HEIGHT - margin));
-        this.position = new Point2D(x, y);
     }
 
     @Override
@@ -54,4 +48,5 @@ public class Agent implements IAgent{
     public double distanceTo(Point2D position) {
         return this.position.distance(position);
     }
+
 }

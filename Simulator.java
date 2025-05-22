@@ -27,7 +27,7 @@ public class Simulator {
                 }
 
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(200);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     System.err.println("Simulation interrupted.");
