@@ -8,10 +8,12 @@ public class Simulator {
     private DataCollector data_collector;
     private boolean paused = false;
     private boolean running = false;
+    private List<Agent> evacuated_agents;
 
     public Simulator() {
         this.environment = new Environment();
         this.data_collector = new DataCollector();
+        this.evacuated_agents = new ArrayList<>();
     }
 
     public boolean run() {
@@ -49,10 +51,8 @@ public class Simulator {
         try {
             environment.update();
             List<Agent> safe_guys = environment.evacuated();
-            int i = 0;
+            evacuated_agents.addAll(safe_guys);
             for (Agent agent : safe_guys) {
-                System.out.println(i);
-                i++;
                 environment.removeAgent(agent);
                 data_collector.collectData(1);
             }
@@ -97,7 +97,7 @@ public class Simulator {
         try {
             paused = true;
             //environment.remove();
-            data_collector = new DataCollector();
+            //data_collector = new DataCollector();
             System.out.println("Simulation stopped.");
             return true;
         } catch (Exception e) {
@@ -128,6 +128,10 @@ public class Simulator {
 
     public List<Point2D> getExitPositions(){
         return environment.getExitPositions();
+    }
+
+    public int getEvacuatedAgents(){
+        return evacuated_agents.size();
     }
 
 }
