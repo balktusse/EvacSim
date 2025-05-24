@@ -1,4 +1,5 @@
 import javafx.application.Platform;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -9,6 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
@@ -22,6 +24,7 @@ public class Visualization {
     private Stage primaryStage;
     private Button startBtn, pauseBtn, resumeBtn, stopBtn, resetBtn;
     private Thread renderThread;
+    private int numAgents;
 
 
     public Visualization(Simulator simulator) {
@@ -45,12 +48,12 @@ public class Visualization {
         Button startSimulationBtn = new Button("Start Simulation");
         startSimulationBtn.setOnAction(e -> {
             try {
-                int number = Integer.parseInt(agentNumField.getText());
-                if (number <= 0) {
+                numAgents = Integer.parseInt(agentNumField.getText());
+                if (numAgents <= 0) {
                     agentNumField.setStyle("-fx-border-color: red;");
                     return;
                 }
-                showSimulationUI(number);
+                showSimulationUI();
             } catch (NumberFormatException ex) {
                 agentNumField.setStyle("-fx-border-color: red;");
             }
@@ -68,32 +71,39 @@ public class Visualization {
         Platform.runLater(() -> menuLayout.requestFocus());
     }
 
-    private void showSimulationUI(int number) {
+    private void showSimulationUI() {
         renderPane = new Pane();
 
-        initializeButtons(number);
+        initializeButtons();
         updateButtonStates(false, true, true, false, true);
 
         HBox controls = new HBox(10, startBtn, pauseBtn, resumeBtn, stopBtn, resetBtn);
         controls.setAlignment(Pos.CENTER);
 
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        double screenWidth = screenBounds.getWidth();
+        double screenHeight = screenBounds.getHeight();
+
         BorderPane root = new BorderPane();
         root.setCenter(renderPane);
         root.setBottom(controls);
 
-        Scene simulationScene = new Scene(root, 1650, 850);
+        Scene simulationScene = new Scene(root, screenWidth * 0.96, screenHeight * 0.95);
 
         primaryStage.setTitle("Simulation Visualization");
         primaryStage.setScene(simulationScene);
         primaryStage.centerOnScreen();
         primaryStage.show();
 
-        scaleX = scaleY = 400.0 / 200.0;
-        renderStaticObjects(number);
-        startRenderingLoop(number);
+        double uniformScale = Math.min((screenWidth / 800), (screenHeight * 0.90 / 400));
+        scaleX = uniformScale;
+        scaleY = uniformScale;
+
+        renderStaticObjects();
+        startRenderingLoop();
     }
 
-    private void initializeButtons(int number) {
+    private void initializeButtons() {
         startBtn = new Button("Start");
         pauseBtn = new Button("Pause");
         resumeBtn = new Button("Resume");
@@ -124,7 +134,7 @@ public class Visualization {
             simulator.reset();
             simulator = new Simulator();
             renderPane.getChildren().clear();
-            renderStaticObjects(number);
+            renderStaticObjects();
             render();
             updateButtonStates(false, true, true, false, true);
         });
@@ -159,7 +169,7 @@ public class Visualization {
         Platform.runLater(() -> menuLayout.requestFocus());
     }
 
-    private void startRenderingLoop(int number) {
+    private void startRenderingLoop() {
         renderThread = new Thread(() -> {
             try {
                 while (!Thread.currentThread().isInterrupted()) {
@@ -170,11 +180,10 @@ public class Visualization {
                         }
                         render();
                         
-                        System.out.println(simulator.getEvacuatedAgents());
-                        if (simulator.getEvacuatedAgents() == number){
+                        if (simulator.getEvacuatedAgents() == numAgents){
                             simulator.stop();
                             if (renderThread != null && renderThread.isAlive()) {
-                                renderThread.interrupt(); // Stop the loop
+                                renderThread.interrupt();
                             }
                             showEndScreen();
                         }
@@ -196,8 +205,8 @@ public class Visualization {
         }
     }
 
-    private void renderStaticObjects(int number) {
-        simulator.addAgents(number);
+    private void renderStaticObjects() {
+        simulator.addAgents(numAgents);
         for (Point2D p : simulator.getObstaclePositions()) {
             Rectangle obsRect = new Rectangle(p.getX() * scaleX, p.getY() * scaleY, 2, 2);
             obsRect.setFill(Color.GRAY);
