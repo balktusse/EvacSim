@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.text.Text;
+import javafx.scene.control.Label;
 
 public class Visualization {
     private Simulator simulator;
@@ -20,6 +21,8 @@ public class Visualization {
     private double scaleX = 1.0;
     private double scaleY = 1.0;
     private Stage primaryStage;
+    private Label evacCountLabel = new Label("Evacuated: 0");
+    private Label timeLabel = new Label("Time: 0.0s");
 
     public Visualization(Simulator simulator) {
         this.simulator = simulator;
@@ -95,7 +98,7 @@ public class Visualization {
             }
         });
 
-        HBox controls = new HBox(10, startBtn, pauseBtn, resumeBtn, stopBtn, resetBtn);
+        HBox controls = new HBox(10, startBtn, pauseBtn, resumeBtn, stopBtn, resetBtn, evacCountLabel, timeLabel);
         controls.setAlignment(Pos.CENTER);
 
         BorderPane root = new BorderPane();
@@ -117,17 +120,22 @@ public class Visualization {
     }
 
     private void showEndScreen() {
-        Text title = new Text("Simulation Ending");
+        double time = simulator.getElapsedTime();
+        int evacuated = simulator.getEvacuatedCount();
 
-        VBox menuLayout = new VBox(20, title);
-        menuLayout.setAlignment(Pos.CENTER);
-        Scene menuScene = new Scene(menuLayout, 500, 500);
+        Text title = new Text("Simulation Complete");
+        Text timeText = new Text(String.format("Total Time: %.1f seconds", time));
+        Text evacText = new Text("Evacuated Agents: " + evacuated);
 
-        primaryStage.setTitle("Endin' Screen");
-        primaryStage.setScene(menuScene);
+        VBox endLayout = new VBox(20, title, timeText, evacText);
+        endLayout.setAlignment(Pos.CENTER);
+        Scene endScene = new Scene(endLayout, 500, 500);
+
+        primaryStage.setTitle("End Screen");
+        primaryStage.setScene(endScene);
         primaryStage.show();
 
-        Platform.runLater(() -> menuLayout.requestFocus());
+        Platform.runLater(() -> endLayout.requestFocus());
     }
 
     private void startRenderingLoop() {
@@ -137,7 +145,7 @@ public class Visualization {
                     Thread.sleep(50);
                     if (simulator.isRunning() && !simulator.isPaused()) {
                         Platform.runLater(() -> {
-                            simulator.update();
+                            //simulator.update();
                             render();
                         });
                     } else {
@@ -160,6 +168,10 @@ public class Visualization {
             Circle agentCircle = new Circle(p.getX() * scaleX, p.getY() * scaleY, 5, Color.BLUE);
             renderPane.getChildren().add(agentCircle);
         }
+
+        // Update label
+        evacCountLabel.setText("Evacuated: " + simulator.getEvacuatedCount());
+        timeLabel.setText(String.format("Time: %.1fs", simulator.getElapsedTime()));
     }
 
     private void renderStaticObjects() {

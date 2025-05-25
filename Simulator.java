@@ -8,6 +8,7 @@ public class Simulator {
     private DataCollector data_collector;
     private boolean paused = false;
     private boolean running = false;
+    private long lastUpdateTime;
 
     public Simulator() {
         this.environment = new Environment();
@@ -16,7 +17,7 @@ public class Simulator {
 
     public boolean run() {
         if(running){return false;}
-
+        lastUpdateTime = System.nanoTime();
         paused = false;
         running = true;
 
@@ -24,10 +25,12 @@ public class Simulator {
             while (running) {
                 if (!paused) {
                     update();
+
+
                 }
 
                 try {
-                    Thread.sleep(200);
+                    Thread.sleep(50);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     System.err.println("Simulation interrupted.");
@@ -47,17 +50,17 @@ public class Simulator {
         }
 
         try {
+            long now = System.nanoTime();
+            double deltaTime = (now - lastUpdateTime) / 1_000_000_000.0;  // seconds
+            lastUpdateTime = now;
             environment.update();
-            List<Agent> safe_guys = environment.evacuated();
-            int i = 0;
-            for (Agent agent : safe_guys) {
-                System.out.println(i);
-                i++;
+            List<Agent> evacuatedAgents = environment.evacuated();
+            for (Agent agent : evacuatedAgents) {
                 environment.removeAgent(agent);
-                data_collector.collectData(1);
             }
-            
-            data_collector.advanceTime(1.0);
+
+            data_collector.collect_data(evacuatedAgents.size());
+            data_collector.advanceTime(deltaTime);
 
             //visualization.update();
 
@@ -97,7 +100,7 @@ public class Simulator {
         try {
             paused = true;
             //environment.remove();
-            data_collector = new DataCollector();
+            //data_collector = new DataCollector();
             System.out.println("Simulation stopped.");
             return true;
         } catch (Exception e) {
@@ -128,6 +131,14 @@ public class Simulator {
 
     public List<Point2D> getExitPositions(){
         return environment.getExitPositions();
+    }
+
+    public int getEvacuatedCount(){
+        return data_collector.getTotalEvacuated();
+    }
+
+    public double getElapsedTime() {
+        return data_collector.getElapsedTime();  // Make sure DataCollector supports this
     }
 
 }

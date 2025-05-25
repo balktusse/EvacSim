@@ -1,5 +1,5 @@
 public interface IDataCollector {
 
-    void collectData(int evacuatedAgents);
+    void collect_data(int evacuatedAgents);
     String generateReport();
 }
