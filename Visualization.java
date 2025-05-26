@@ -1,4 +1,5 @@
 import javafx.application.Platform;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -9,6 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
@@ -21,6 +23,9 @@ public class Visualization {
     private double scaleX = 1.0;
     private double scaleY = 1.0;
     private Stage primaryStage;
+    private Button startBtn, pauseBtn, resumeBtn, stopBtn, resetBtn;
+    private Thread renderThread;
+    private int numAgents;
     private Label evacCountLabel = new Label("Evacuated: 0");
     private Label timeLabel = new Label("Time: 0.0s");
 
@@ -30,27 +35,33 @@ public class Visualization {
 
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
+        primaryStage.setOnCloseRequest(event -> {
+            Platform.exit();
+            System.exit(0);
+        });
         showStartMenu();
     }
 
     private void showStartMenu() {
         Text title = new Text("Simulation Menu");
+        TextField agentNumField = new TextField();
+        agentNumField.setPromptText("Number of Agents");
+        agentNumField.setPrefColumnCount(9);
 
-        TextField agentnum = new TextField();
-        agentnum.setPromptText("Number of Agents");
-        agentnum.setPrefColumnCount(9);
-
-        HBox inputBox = new HBox(10, agentnum);
+        HBox inputBox = new HBox(10, agentNumField);
         inputBox.setAlignment(Pos.CENTER);
 
         Button startSimulationBtn = new Button("Start Simulation");
         startSimulationBtn.setOnAction(e -> {
             try {
-                int number = Integer.parseInt(agentnum.getText());
-                showSimulationUI(number);
+                numAgents = Integer.parseInt(agentNumField.getText());
+                if (numAgents <= 0) {
+                    agentNumField.setStyle("-fx-border-color: red;");
+                    return;
+                }
+                showSimulationUI();
             } catch (NumberFormatException ex) {
-                System.out.println("Invalid number entered.");
-                // You can also show a popup or highlight the field in red here
+                agentNumField.setStyle("-fx-border-color: red;");
             }
         });
 
@@ -60,63 +71,87 @@ public class Visualization {
 
         primaryStage.setTitle("Start Menu");
         primaryStage.setScene(menuScene);
+        primaryStage.centerOnScreen();
         primaryStage.show();
 
         Platform.runLater(() -> menuLayout.requestFocus());
     }
 
-    private void showSimulationUI(int number) {
+    private void showSimulationUI() {
         renderPane = new Pane();
-        renderPane.setPrefSize(400, 400);
 
-        simulator.addAgents(number);
-
-        Button startBtn = new Button("Start");
-        Button pauseBtn = new Button("Pause");
-        Button resumeBtn = new Button("Resume");
-        Button stopBtn = new Button("Stop");
-        Button resetBtn = new Button("Reset");
-
-        startBtn.setOnAction(e -> simulator.run());
-        pauseBtn.setOnAction(e -> simulator.pause());
-        resumeBtn.setOnAction(e -> simulator.resume());
-        stopBtn.setOnAction(e -> {
-            try {
-                simulator.stop();
-                showEndScreen();
-            } catch (NumberFormatException ex) {
-                System.out.println("Error");
-            }
-        });
-        resetBtn.setOnAction(e -> {
-            try {
-                simulator.reset();
-                simulator.pause();
-                showSimulationUI(number);
-            } catch (NumberFormatException ex) {
-                System.out.println("Error");
-            }
-        });
+        initializeButtons();
+        updateButtonStates(false, true, true, false, true);
 
         HBox controls = new HBox(10, startBtn, pauseBtn, resumeBtn, stopBtn, resetBtn, evacCountLabel, timeLabel);
         controls.setAlignment(Pos.CENTER);
+
+        Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+        double screenWidth = screenBounds.getWidth();
+        double screenHeight = screenBounds.getHeight();
 
         BorderPane root = new BorderPane();
         root.setCenter(renderPane);
         root.setBottom(controls);
 
-        Scene simulationScene = new Scene(root, 1650, 850);
+        Scene simulationScene = new Scene(root, screenWidth * 0.96, screenHeight * 0.95);
 
         primaryStage.setTitle("Simulation Visualization");
         primaryStage.setScene(simulationScene);
         primaryStage.centerOnScreen();
+        primaryStage.show();
 
-        // Adjust scaling based on map size (adjust 200.0 to match your map size)
-        scaleX = 400.0 / 200.0;
-        scaleY = 400.0 / 200.0;
+        double uniformScale = Math.min((screenWidth / 800), (screenHeight * 0.90 / 400));
+        scaleX = uniformScale;
+        scaleY = uniformScale;
 
         renderStaticObjects();
         startRenderingLoop();
+    }
+
+    private void initializeButtons() {
+        startBtn = new Button("Start");
+        pauseBtn = new Button("Pause");
+        resumeBtn = new Button("Resume");
+        stopBtn = new Button("Stop");
+        resetBtn = new Button("Reset");
+
+        startBtn.setOnAction(e -> {
+            simulator.run();
+            updateButtonStates(true, false, true, false, false);
+        });
+
+        pauseBtn.setOnAction(e -> {
+            simulator.pause();
+            updateButtonStates(true, true, false, false, false);
+        });
+
+        resumeBtn.setOnAction(e -> {
+            simulator.resume();
+            updateButtonStates(true, false, true, false, false);
+        });
+
+        stopBtn.setOnAction(e -> {
+            simulator.stop();
+            showEndScreen();
+        });
+
+        resetBtn.setOnAction(e -> {
+            simulator.reset();
+            simulator = new Simulator();
+            renderPane.getChildren().clear();
+            renderStaticObjects();
+            render();
+            updateButtonStates(false, true, true, false, true);
+        });
+    }
+
+    private void updateButtonStates(boolean start, boolean pause, boolean resume, boolean stop, boolean reset) {
+        startBtn.setDisable(start);
+        pauseBtn.setDisable(pause);
+        resumeBtn.setDisable(resume);
+        stopBtn.setDisable(stop);
+        resetBtn.setDisable(reset);
     }
 
     private void showEndScreen() {
@@ -126,6 +161,12 @@ public class Visualization {
         Text title = new Text("Simulation Complete");
         Text timeText = new Text(String.format("Total Time: %.1f seconds", time));
         Text evacText = new Text("Evacuated Agents: " + evacuated);
+        Button newSimulationBtn = new Button("New Simulation");
+        newSimulationBtn.setOnAction(e -> {
+            simulator.reset();
+            simulator = new Simulator();
+            showStartMenu();
+        });
 
         VBox endLayout = new VBox(20, title, timeText, evacText);
         endLayout.setAlignment(Pos.CENTER);
@@ -133,24 +174,31 @@ public class Visualization {
 
         primaryStage.setTitle("End Screen");
         primaryStage.setScene(endScene);
+        primaryStage.centerOnScreen();
         primaryStage.show();
 
         Platform.runLater(() -> endLayout.requestFocus());
     }
 
     private void startRenderingLoop() {
-        Thread renderThread = new Thread(() -> {
+        renderThread = new Thread(() -> {
             try {
                 while (!Thread.currentThread().isInterrupted()) {
                     Thread.sleep(50);
-                    if (simulator.isRunning() && !simulator.isPaused()) {
-                        Platform.runLater(() -> {
-                            //simulator.update();
-                            render();
-                        });
-                    } else {
-                        Platform.runLater(this::render);
-                    }
+                    Platform.runLater(() -> {
+                        if (simulator.isRunning() && !simulator.isPaused()) {
+                            simulator.update();
+                        }
+                        render();
+
+                        if (simulator.getEvacuatedAgents() == numAgents){
+                            simulator.stop();
+                            if (renderThread != null && renderThread.isAlive()) {
+                                renderThread.interrupt();
+                            }
+                            showEndScreen();
+                        }
+                    });
                 }
             } catch (InterruptedException e) {
                 // Thread interrupted
@@ -161,26 +209,23 @@ public class Visualization {
     }
 
     private void render() {
-        // Clear only agent nodes
         renderPane.getChildren().removeIf(node -> node instanceof Circle);
-
         for (Point2D p : simulator.getAgentPositions()) {
             Circle agentCircle = new Circle(p.getX() * scaleX, p.getY() * scaleY, 5, Color.BLUE);
             renderPane.getChildren().add(agentCircle);
         }
-
         // Update label
         evacCountLabel.setText("Evacuated: " + simulator.getEvacuatedCount());
         timeLabel.setText(String.format("Time: %.1fs", simulator.getElapsedTime()));
     }
 
     private void renderStaticObjects() {
+        simulator.addAgents(numAgents);
         for (Point2D p : simulator.getObstaclePositions()) {
             Rectangle obsRect = new Rectangle(p.getX() * scaleX, p.getY() * scaleY, 2, 2);
             obsRect.setFill(Color.GRAY);
             renderPane.getChildren().add(obsRect);
         }
-
         for (Point2D p : simulator.getExitPositions()) {
             Rectangle exitRect = new Rectangle(p.getX() * scaleX, p.getY() * scaleY, 2, 2);
             exitRect.setFill(Color.GREEN);

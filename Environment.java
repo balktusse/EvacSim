@@ -146,7 +146,6 @@ public class Environment implements IEnvironment {
         attractors.add(attractor);
     }
 
-
     @Override
     public void setMagnet(double force_agent, double force_exit, double force_object, double force_attractor) {
         this.magnet = new Magnet(force_agent, force_exit, force_object, force_attractor);

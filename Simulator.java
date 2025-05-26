@@ -9,10 +9,12 @@ public class Simulator {
     private boolean paused = false;
     private boolean running = false;
     private long lastUpdateTime;
+    private List<Agent> evacuated_agents;
 
     public Simulator() {
         this.environment = new Environment();
         this.data_collector = new DataCollector();
+        this.evacuated_agents = new ArrayList<>();
     }
 
     public boolean run() {
@@ -25,8 +27,6 @@ public class Simulator {
             while (running) {
                 if (!paused) {
                     update();
-
-
                 }
 
                 try {
@@ -55,10 +55,10 @@ public class Simulator {
             lastUpdateTime = now;
             environment.update();
             List<Agent> evacuatedAgents = environment.evacuated();
+            evacuated_agents.addAll(evacuatedAgents);
             for (Agent agent : evacuatedAgents) {
                 environment.removeAgent(agent);
             }
-
             data_collector.collect_data(evacuatedAgents.size());
             data_collector.advanceTime(deltaTime);
 
@@ -133,6 +133,10 @@ public class Simulator {
         return environment.getExitPositions();
     }
 
+    public int getEvacuatedAgents(){
+        return evacuated_agents.size();
+    }
+
     public int getEvacuatedCount(){
         return data_collector.getTotalEvacuated();
     }
@@ -140,5 +144,4 @@ public class Simulator {
     public double getElapsedTime() {
         return data_collector.getElapsedTime();  // Make sure DataCollector supports this
     }
-
 }
