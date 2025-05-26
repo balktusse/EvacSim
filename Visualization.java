@@ -33,6 +33,10 @@ public class Visualization {
 
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
+        primaryStage.setOnCloseRequest(event -> {
+            Platform.exit();
+            System.exit(0);
+        });
         showStartMenu();
     }
 
