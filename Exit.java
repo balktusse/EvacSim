@@ -22,18 +22,6 @@ public class Exit implements IExit{
     }
 
     @Override
-    public boolean isAt(Point2D given_position) {
-        double x = given_position.getX();
-        double y = given_position.getY();
-
-        double minX = Math.min(position.get(0).getX(), position.get(1).getX());
-        double maxX = Math.max(position.get(0).getX(), position.get(1).getX());
-        double yLine = position.get(0).getY(); // assume both have same Y
-
-        return (x >= minX && x <= maxX) && (y == yLine);
-    }
-
-    @Override
     public double distanceTo(Point2D other_position) {
         double x1 = Math.min(position.get(0).getX(), position.get(1).getX());
         double x2 = Math.max(position.get(0).getX(), position.get(1).getX());
