@@ -2,11 +2,12 @@ import javafx.geometry.Point2D;
 
 public class Agent implements IAgent{
 
+    private static final double MAX_SPEED = 3.0;
     private final int id;
     private boolean status;
     private Point2D position;
     private Point2D velocity;
-    private static final double MAX_SPEED = 3.0;
+    
 
 
     public Agent(int id, Point2D start_position){
